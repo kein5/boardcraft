@@ -1,0 +1,24 @@
+FROM rust:1.75-slim
+
+# 必要なパッケージのインストール
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    pkg-config \
+    libssl-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# 開発用ユーザーの作成
+RUN useradd -m -s /bin/bash vscode
+
+# 作業ディレクトリの設定
+WORKDIR /workspace
+
+# ユーザーの切り替え
+USER vscode
+
+# Rustのツールチェーンの設定
+RUN rustup default stable && \
+    rustup component add rustfmt clippy
+
+# 環境変数の設定
+ENV PATH="/home/vscode/.cargo/bin:${PATH}" 
