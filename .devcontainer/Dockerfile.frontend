@@ -18,4 +18,7 @@ WORKDIR /workspace
 USER vscode
 
 # 環境変数の設定
-ENV PATH="/home/vscode/.local/bin:${PATH}" 
+ENV PATH="/home/vscode/.local/bin:${PATH}"
+
+# コンテナ起動時のコマンド
+CMD ["pnpm", "dev"] 
