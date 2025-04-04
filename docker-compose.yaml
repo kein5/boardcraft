@@ -5,46 +5,73 @@ services:
     build:
       context: .
       dockerfile: .devcontainer/Dockerfile.backend
+    container_name: boardcraft-backend
     volumes:
-      - .:/workspace
+      - ..:/workspaces:cached
+      - backend-target:/workspaces/${localWorkspaceFolderBasename}/target
+      - cargo-cache:/usr/local/cargo/registry
+      - ~/.gitconfig:/home/vscode/.gitconfig:ro
+    working_dir: /workspaces/${localWorkspaceFolderBasename}
     ports:
       - "3000:3000"
     depends_on:
-      - postgres
-      - mongodb
+      postgres:
+        condition: service_healthy
+      surrealdb:
+        condition: service_started
     environment:
       - DATABASE_URL=postgres://postgres:postgres@postgres:5432/postgres
-      - MONGODB_URI=mongodb://mongodb:27017
+      - SURREALDB_URL=ws://surrealdb:8000/rpc
+    user: vscode
+    init: true
+    command: sleep infinity
 
   frontend:
     build:
       context: .
       dockerfile: .devcontainer/Dockerfile.frontend
+    container_name: boardcraft-frontend
     volumes:
-      - .:/workspace
+      - ..:/workspaces:cached
+      - frontend-node-modules:/workspaces/${localWorkspaceFolderBasename}/frontend/node_modules
+    working_dir: /workspaces/${localWorkspaceFolderBasename}/frontend
     ports:
       - "5173:5173"
     environment:
       - VITE_API_URL=http://localhost:3000
+    user: node
+    init: true
+    command: sleep infinity
 
   postgres:
     image: postgres:15
+    container_name: boardcraft-postgres
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=postgres
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
-  mongodb:
-    image: mongo:6
+  surrealdb:
+    image: surrealdb/surrealdb:latest
+    container_name: boardcraft-surrealdb
     ports:
-      - "27017:27017"
+      - "8000:8000"
     volumes:
-      - mongodb_data:/data/db
+      - surrealdb_data:/data
+    command: start --user root --pass root --auth --bind 0.0.0.0:8000 file:/data/database.db
 
 volumes:
   postgres_data:
-  mongodb_data: 
+  surrealdb_data:
+  cargo-cache:
+  backend-target:
+  frontend-node-modules: 

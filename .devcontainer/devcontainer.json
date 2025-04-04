@@ -2,7 +2,9 @@
   "name": "Full Stack Development Environment",
   "dockerComposeFile": "../docker-compose.yaml",
   "service": "backend",
-  "workspaceFolder": "/workspace",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "remoteUser": "vscode",
+  
   "customizations": {
     "vscode": {
       "extensions": [
@@ -10,8 +12,7 @@
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
         "bradlc.vscode-tailwindcss",
-        "prisma.prisma",
-        "mongodb.mongodb-vscode"
+        "prisma.prisma"
       ],
       "settings": {
         "editor.formatOnSave": true,
@@ -20,7 +21,21 @@
       }
     }
   },
-  "forwardPorts": [3000, 5173, 5432, 27017],
-  "postCreateCommand": "cargo install cargo-watch",
-  "remoteUser": "vscode"
+
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "configureZshAsDefaultShell": true,
+      "installOhMyZsh": true,
+      "upgradePackages": true
+    }
+  },
+
+  "forwardPorts": [3000, 5173, 5433, 8000],
+  
+  "initializeCommand": {
+    "windows": ["cmd", "/C", "if not exist target mkdir target"],
+    "linux": ["mkdir", "-p", "target"],
+    "osx": ["mkdir", "-p", "target"]
+  }
 } 
