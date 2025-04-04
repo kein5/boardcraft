@@ -3,15 +3,15 @@ version: '3.8'
 services:
   backend:
     build:
-      context: .
+      context: ..
       dockerfile: .devcontainer/Dockerfile.backend
     container_name: boardcraft-backend
     volumes:
-      - ..:/workspaces:cached
-      - backend-target:/workspaces/${localWorkspaceFolderBasename}/target
+      - ..:/workspaces/boardcraft:cached
+      - backend-target:/workspaces/boardcraft/target
       - cargo-cache:/usr/local/cargo/registry
       - ~/.gitconfig:/home/vscode/.gitconfig:ro
-    working_dir: /workspaces/${localWorkspaceFolderBasename}
+    working_dir: /workspaces/boardcraft
     ports:
       - "3000:3000"
     depends_on:
@@ -28,13 +28,13 @@ services:
 
   frontend:
     build:
-      context: .
+      context: ..
       dockerfile: .devcontainer/Dockerfile.frontend
     container_name: boardcraft-frontend
     volumes:
-      - ..:/workspaces:cached
-      - frontend-node-modules:/workspaces/${localWorkspaceFolderBasename}/frontend/node_modules
-    working_dir: /workspaces/${localWorkspaceFolderBasename}/frontend
+      - ..:/workspaces/boardcraft:cached
+      - frontend-node-modules:/workspaces/boardcraft/frontend/node_modules
+    working_dir: /workspaces/boardcraft/frontend
     ports:
       - "5173:5173"
     environment:
