@@ -76,8 +76,9 @@
   
   "remoteEnv": {
     "PATH": "${containerEnv:PATH}:/usr/local/cargo/bin",
-    "SHELL": "/bin/zsh"
+    "SHELL": "/bin/zsh",
+    "GIT_CONFIG_GLOBAL": "/home/vscode/.config/git/config"
   },
 
-  "postCreateCommand": "rm -rf /home/vscode/.gitconfig && mkdir -p /home/vscode/.config/git && git config --global core.autocrlf input && git config --global core.eol lf"
+  "postCreateCommand": "mkdir -p /home/vscode/.config/git && git config --global core.autocrlf input && git config --global core.eol lf"
 }
