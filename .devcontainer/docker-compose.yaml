@@ -8,7 +8,7 @@ services:
       - ..:/workspaces/boardcraft:cached
       - backend-target:/workspaces/boardcraft/target
       - cargo-cache:/usr/local/cargo/registry
-      - ${HOME}/.gitconfig:/home/vscode/.gitconfig:ro
+      - ${HOME}/.gitconfig:/root/.gitconfig:ro
     working_dir: /workspaces/boardcraft
     ports:
       - "3000:3000"
@@ -20,8 +20,8 @@ services:
     environment:
       - DATABASE_URL=postgres://postgres:postgres@postgres:5432/postgres
       - SURREALDB_URL=ws://surrealdb:8000/rpc
-      - GIT_CONFIG_GLOBAL=/home/vscode/.gitconfig
-    user: vscode
+      - GIT_CONFIG_GLOBAL=/root/.gitconfig
+    user: root
     init: true
     command: sleep infinity
 
@@ -67,8 +67,13 @@ services:
       - "8000:8000"
     volumes:
       - surrealdb_data:/data
-    command: start --user root --pass root --auth --bind 0.0.0.0:8000 file:/data/database.db
+    command: ["start", "--user", "root", "--pass", "root", "--auth", "--bind", "0.0.0.0:8000", "file:///data/database.db"]
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 volumes:
   postgres_data:

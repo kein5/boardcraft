@@ -6,5 +6,4 @@ COPY .. .
 
 RUN rustup default stable \
     && rustup component add rustfmt clippy \
-    && cargo install cargo-watch \
-    && mkdir -p target
+    && cargo install cargo-watch
