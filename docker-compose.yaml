@@ -1,52 +1,56 @@
 version: '3.8'
 
 services:
-  backend-test:
+  backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: boardcraft-backend-test
+    container_name: boardcraft-backend
     volumes:
-      - ./backend:/workspaces/boardcraft:cached
-      - backend-target:/workspaces/boardcraft/target
+      - ./backend:/app:cached
+      - backend-target:/app/target
       - cargo-cache:/usr/local/cargo/registry
-    working_dir: /workspaces/boardcraft
-    environment:
-      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/postgres
-      - SURREALDB_URL=ws://surrealdb:8000/rpc
-      - RUST_BACKTRACE=1
-      - RUST_LOG=debug
+    working_dir: /app
+    ports:
+      - "3000:3000"
     depends_on:
       postgres:
         condition: service_healthy
       surrealdb:
         condition: service_started
-    command: >
-      sh -c "cargo test --all --verbose"
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/postgres
+      - SURREALDB_URL=ws://surrealdb:8000/rpc
+    user: vscode
+    init: true
+    command: sleep infinity
 
-  frontend-test:
+  frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: boardcraft-frontend-test
+    container_name: boardcraft-frontend
     volumes:
-      - ./frontend:/workspaces/boardcraft/frontend:cached
-      - frontend-node-modules:/workspaces/boardcraft/frontend/node_modules
-      - pnpm-store:/root/.pnpm-store
-    working_dir: /workspaces/boardcraft/frontend
+      - ./frontend:/app:cached
+      - frontend-node-modules:/app/node_modules
+    working_dir: /app
+    ports:
+      - "5173:5173"
     environment:
       - VITE_API_URL=http://localhost:3000
-      - CI=true
-    command: >
-      sh -c "pnpm install && pnpm test"
+    user: node
+    init: true
+    command: sleep infinity
 
   postgres:
     image: postgres:15
-    container_name: boardcraft-postgres-test
+    container_name: boardcraft-postgres
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=postgres
+    ports:
+      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -54,18 +58,21 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    restart: unless-stopped
 
   surrealdb:
     image: surrealdb/surrealdb:latest
-    container_name: boardcraft-surrealdb-test
+    container_name: boardcraft-surrealdb
+    ports:
+      - "8000:8000"
     volumes:
       - surrealdb_data:/data
     command: start --user root --pass root --auth --bind 0.0.0.0:8000 file:/data/database.db
+    restart: unless-stopped
 
 volumes:
   postgres_data:
   surrealdb_data:
   cargo-cache:
   backend-target:
-  frontend-node-modules:
-  pnpm-store: 
+  frontend-node-modules: 
