@@ -1,0 +1,78 @@
+{
+  "path": "cz-conventional-changelog",
+  "types": {
+    "feat": {
+      "description": "新機能の追加",
+      "title": "Features"
+    },
+    "fix": {
+      "description": "バグ修正",
+      "title": "Bug Fixes"
+    },
+    "docs": {
+      "description": "ドキュメントの更新",
+      "title": "Documentation"
+    },
+    "style": {
+      "description": "コードのスタイル修正（フォーマット、セミコロンなど）",
+      "title": "Styles"
+    },
+    "refactor": {
+      "description": "リファクタリング（機能追加やバグ修正を含まない変更）",
+      "title": "Code Refactoring"
+    },
+    "perf": {
+      "description": "パフォーマンス改善",
+      "title": "Performance Improvements"
+    },
+    "test": {
+      "description": "テストの追加・修正",
+      "title": "Tests"
+    },
+    "build": {
+      "description": "ビルドシステムや外部依存関係の変更",
+      "title": "Builds"
+    },
+    "ci": {
+      "description": "CI設定の変更",
+      "title": "Continuous Integrations"
+    },
+    "chore": {
+      "description": "その他の変更（ビルドプロセスやツールの変更など）",
+      "title": "Chores"
+    },
+    "revert": {
+      "description": "変更の取り消し",
+      "title": "Reverts"
+    }
+  },
+  "scopes": {
+    "frontend": {
+      "description": "フロントエンド関連の変更"
+    },
+    "backend": {
+      "description": "バックエンド関連の変更"
+    },
+    "docker": {
+      "description": "Docker関連の変更"
+    },
+    "devcontainer": {
+      "description": "開発環境関連の変更"
+    },
+    "config": {
+      "description": "設定ファイルの変更"
+    },
+    "docs": {
+      "description": "ドキュメント関連の変更"
+    }
+  },
+  "messages": {
+    "type": "コミットの種類を選択してください:",
+    "scope": "変更のスコープを選択してください:",
+    "subject": "変更内容を簡潔に説明してください:\n",
+    "body": "変更の詳細を説明してください（オプション）:\n",
+    "breaking": "破壊的な変更がある場合は説明してください（オプション）:\n",
+    "footer": "関連するIssue番号を入力してください（例: #123）:",
+    "confirmCommit": "このコミットメッセージでよろしいですか？"
+  }
+} 

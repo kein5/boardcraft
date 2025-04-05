@@ -1,4 +1,4 @@
-FROM rust:1.75-slim-bullseye
+FROM rust:1-bookworm AS builder
 
 # 必要なパッケージをインストール
 RUN apt-get update && apt-get install -y \
