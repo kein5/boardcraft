@@ -73,4 +73,7 @@ yarn-error.log*
 *.p7m
 *.p7s
 *.crl
-*.ocsp 
+*.ocsp
+
+# Root target directory
+/target/ 
