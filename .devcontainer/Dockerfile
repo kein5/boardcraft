@@ -23,12 +23,6 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y \
 # Biomeのインストール
 RUN curl -fsSL https://biomejs.dev/installer | bash
 
-# vscodeユーザーの作成
-RUN useradd -m -s /bin/bash vscode \
-    && usermod -aG sudo vscode \
-    && echo "vscode ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-
-USER vscode
 WORKDIR /workspaces/boardcraft
 
 CMD ["sleep", "infinity"]

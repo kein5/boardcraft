@@ -7,7 +7,6 @@ services:
     volumes:
       - ..:/workspaces/boardcraft
     working_dir: /workspaces/boardcraft
-    # user: vscode
     command: sleep infinity
 
   postgres:
