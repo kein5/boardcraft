@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  backend-test:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.backend
+    container_name: boardcraft-backend-test
+    volumes:
+      - .:/workspaces/boardcraft:cached
+      - backend-target:/workspaces/boardcraft/target
+      - cargo-cache:/usr/local/cargo/registry
+    working_dir: /workspaces/boardcraft
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/postgres
+      - SURREALDB_URL=ws://surrealdb:8000/rpc
+      - RUST_BACKTRACE=1
+      - RUST_LOG=debug
+    depends_on:
+      postgres:
+        condition: service_healthy
+      surrealdb:
+        condition: service_started
+    command: >
+      sh -c "cargo test --all --verbose"
+
+  frontend-test:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+    container_name: boardcraft-frontend-test
+    volumes:
+      - .:/workspaces/boardcraft:cached
+      - frontend-node-modules:/workspaces/boardcraft/frontend/node_modules
+      - pnpm-store:/root/.pnpm-store
+    working_dir: /workspaces/boardcraft/frontend
+    environment:
+      - VITE_API_URL=http://localhost:3000
+      - CI=true
+    command: >
+      sh -c "pnpm install && pnpm test"
+
+  postgres:
+    image: postgres:15
+    container_name: boardcraft-postgres-test
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  surrealdb:
+    image: surrealdb/surrealdb:latest
+    container_name: boardcraft-surrealdb-test
+    volumes:
+      - surrealdb_data:/data
+    command: start --user root --pass root --auth --bind 0.0.0.0:8000 file:/data/database.db
+
+volumes:
+  postgres_data:
+  surrealdb_data:
+  cargo-cache:
+  backend-target:
+  frontend-node-modules:
+  pnpm-store: 
