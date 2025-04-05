@@ -2,44 +2,12 @@ services:
   backend:
     build:
       context: ..
-      dockerfile: .devcontainer/Dockerfile.backend
+      dockerfile: .devcontainer/Dockerfile
     container_name: boardcraft-backend
     volumes:
-      - ..:/workspaces/boardcraft:cached
-      - backend-target:/workspaces/boardcraft/target
-      - cargo-cache:/usr/local/cargo/registry
-      - ${HOME}/.gitconfig:/root/.gitconfig:ro
+      - ..:/workspaces/boardcraft
     working_dir: /workspaces/boardcraft
-    ports:
-      - "3000:3000"
-    depends_on:
-      postgres:
-        condition: service_healthy
-      surrealdb:
-        condition: service_started
-    environment:
-      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/postgres
-      - SURREALDB_URL=ws://surrealdb:8000/rpc
-      - GIT_CONFIG_GLOBAL=/root/.gitconfig
-    user: root
-    init: true
-    command: sleep infinity
-
-  frontend:
-    build:
-      context: ..
-      dockerfile: .devcontainer/Dockerfile.frontend
-    container_name: boardcraft-frontend
-    volumes:
-      - ..:/workspaces/boardcraft:cached
-      - frontend-node-modules:/workspaces/boardcraft/frontend/node_modules
-    working_dir: /workspaces/boardcraft/frontend
-    ports:
-      - "5173:5173"
-    environment:
-      - VITE_API_URL=http://localhost:3000
-    user: node
-    init: true
+    # user: vscode
     command: sleep infinity
 
   postgres:
@@ -49,8 +17,6 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=postgres
-    ports:
-      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -63,8 +29,6 @@ services:
   surrealdb:
     image: surrealdb/surrealdb:latest
     container_name: boardcraft-surrealdb
-    ports:
-      - "8000:8000"
     volumes:
       - surrealdb_data:/data
     command: ["start", "--user", "root", "--pass", "root", "--auth", "--bind", "0.0.0.0:8000", "file:///data/database.db"]
@@ -79,5 +43,3 @@ volumes:
   postgres_data:
   surrealdb_data:
   cargo-cache:
-  backend-target:
-  frontend-node-modules: 
