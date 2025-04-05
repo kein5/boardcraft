@@ -30,7 +30,7 @@
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "esbenp.prettier-vscode",
         "editor.codeActionsOnSave": {
-          "source.fixAll.eslint": true
+          "source.fixAll": true
         },
         "editor.tabSize": 2,
         "editor.insertSpaces": true,
@@ -56,7 +56,6 @@
 
   "features": {
     "ghcr.io/devcontainers/features/git:1": {
-      "version": "latest",
       "configureGitUser": true
     },
     "ghcr.io/devcontainers/features/github-cli:1": {},
