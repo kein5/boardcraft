@@ -3,11 +3,11 @@ version: '3.8'
 services:
   backend-test:
     build:
-      context: .
-      dockerfile: docker/Dockerfile.backend
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: boardcraft-backend-test
     volumes:
-      - .:/workspaces/boardcraft:cached
+      - ./backend:/workspaces/boardcraft:cached
       - backend-target:/workspaces/boardcraft/target
       - cargo-cache:/usr/local/cargo/registry
     working_dir: /workspaces/boardcraft
@@ -26,11 +26,11 @@ services:
 
   frontend-test:
     build:
-      context: .
-      dockerfile: docker/Dockerfile.frontend
+      context: ./frontend
+      dockerfile: Dockerfile
     container_name: boardcraft-frontend-test
     volumes:
-      - .:/workspaces/boardcraft:cached
+      - ./frontend:/workspaces/boardcraft/frontend:cached
       - frontend-node-modules:/workspaces/boardcraft/frontend/node_modules
       - pnpm-store:/root/.pnpm-store
     working_dir: /workspaces/boardcraft/frontend
