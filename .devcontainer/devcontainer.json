@@ -79,5 +79,5 @@
     "SHELL": "/bin/zsh"
   },
 
-  "postCreateCommand": "git config --global core.autocrlf input && git config --global core.eol lf"
+  "postCreateCommand": "rm -rf /home/vscode/.gitconfig && mkdir -p /home/vscode/.config/git && git config --global core.autocrlf input && git config --global core.eol lf"
 }
