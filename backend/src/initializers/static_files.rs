@@ -16,19 +16,13 @@ impl Initializer for StaticFilesInitializer {
     }
 
     async fn after_routes(&self, router: AxumRouter, _ctx: &AppContext) -> Result<AxumRouter> {
-        let static_dir = Path::new("assets/target");
+        let static_dir = Path::new("assets/static");
         if !static_dir.exists() {
             return Err(Error::string("Static files directory not found"));
         }
 
-        let serve_dir = get_service(ServeDir::new(static_dir))
-            .handle_error(|error: std::io::Error| async move {
-                (
-                    axum::http::StatusCode::INTERNAL_SERVER_ERROR,
-                    format!("Unhandled internal error: {}", error),
-                )
-            });
+        let serve_dir = get_service(ServeDir::new(static_dir));
 
-        Ok(router.nest_service("/", serve_dir))
+        Ok(router.fallback_service(serve_dir))
     }
 } 
