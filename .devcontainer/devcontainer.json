@@ -72,14 +72,8 @@
 
   "forwardPorts": [3000, 5173, 5433, 8000],
   
-  "postCreateCommand": "git config --global core.autocrlf input && git config --global core.eol lf",
-  
   "remoteEnv": {
     "PATH": "${containerEnv:PATH}:/usr/local/cargo/bin",
     "SHELL": "/bin/zsh"
-  },
-
-  "mounts": [
-    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.gitconfig,target=/home/vscode/.gitconfig,type=bind,consistency=cached"
-  ]
+  }
 }
