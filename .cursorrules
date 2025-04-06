@@ -1,0 +1,56 @@
+# BoardCraft Project Structure
+
+## Project Overview
+BoardCraftは、オンラインでボードゲームを遊べるプラットフォームです。
+
+## Directory Structure
+```
+boardcraft/
+├── .devcontainer/ # 開発環境の設定
+├── frontend/ # フロントエンド（React + TypeScript）
+│ ├── src/ # ソースコード
+│ │ ├── components/ # Reactコンポーネント
+│ │ ├── lib/ # ユーティリティ関数
+│ │ └── styles/ # スタイル定義
+│ └── public/ # 静的ファイル
+└── backend/ # バックエンド（Rust）
+  ├── src/ # ソースコード
+  └── migrations/ # データベースマイグレーション
+```
+
+## 技術スタック
+- フロントエンド
+  - React
+  - TypeScript
+  - Vite
+  - Biome (Linter/Formatter)
+  - TailwindCSS
+  - Radix UI
+
+- バックエンド
+  - Rust
+  - Loco.rs
+  - PostgreSQL
+  - SurrealDB
+
+## 開発環境
+- DevContainer
+- Docker Compose
+- VSCode
+
+## コーディング規約
+### フロントエンド
+- TypeScriptの厳格な型チェック
+- Biomeによるコード整形
+- コンポーネントはアトミックデザインに基づいて設計
+
+### バックエンド
+- Rustの標準的なコーディング規約に従う
+- Loco.rsフレームワークの制約に従う
+- rust-analyzerによるコード整形
+- エラー処理は`Result`型を使用
+
+## Git運用ルール
+- コミットメッセージは[Conventional Commits](https://www.conventionalcommits.org/)に従う
+- ブランチ戦略はGitHub Flowを採用
+- PRは必ずレビューを経てからマージ
